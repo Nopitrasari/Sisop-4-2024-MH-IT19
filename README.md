@@ -28,9 +28,9 @@ Adfi dan timnya juga ingin menambahkan fitur baru dengan membuat file dengan pre
    ``` unzip portofolio.zip -d Soal_1 ```
    jadi sebelum nya kita udah buat direktori Soal_1
 3) lalu kita membuat file inikaryakita.c berikut adalah isi nya :
-   ```
-   #define FUSE_USE_VERSION 35
 ```
+#define FUSE_USE_VERSION 35
+
 #include <fuse3/fuse.h>
 #include <stdio.h>
 #include <string.h>
@@ -49,6 +49,7 @@ Adfi dan timnya juga ingin menambahkan fitur baru dengan membuat file dengan pre
 #define SCRIPT_PATH "bahaya/script.sh"
 #define REVERSE_FILE "bahaya/test-adfi.txt"
 
+//UNTUK MENAMBAHKAN WATERMARK DAN MENGEKSTRAK FOTO
 static void add_watermark_and_move(const char *filename) {
     char command[1024];
     snprintf(command, sizeof(command), "convert '%s' -gravity southeast -draw \"text 0,0 'inikaryakita.id'\" '%s/%s'", filename, WM_DIR, basename((char *)filename));
@@ -59,6 +60,7 @@ static void add_watermark_and_move(const char *filename) {
     }
 }
 
+//MENGUBAH IZIN FILE SCRIPT.SH
 static void make_script_executable(const char *script_path) {
     if (chmod(script_path, S_IRUSR | S_IWUSR | S_IXUSR) == 0) {
         printf("Permissions for %s changed to executable\n", script_path);
@@ -67,6 +69,7 @@ static void make_script_executable(const char *script_path) {
     }
 }
 
+//MEREVERSE FILE TEST-ADFI
 static void reverse_file(const char *filepath) {
     char command[4096];
     snprintf(command, sizeof(command), "rev '%s' > '%s/test_%s'", filepath, BAHAYA_DIR, basename((char *)filepath));
@@ -96,7 +99,7 @@ static int do_getattr(const char *path, struct stat *stbuf, struct fuse_file_inf
 
     return res;
 }
-
+ //UNTUK FUSE NYA
 static int do_readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_t offset,
                       struct fuse_file_info *fi, enum fuse_readdir_flags flags) {
     (void) offset;
@@ -171,4 +174,3 @@ int main(int argc, char *argv[]) {
     return fuse_main(argc, argv, &operations, NULL);
 } 
 ``` 
-
