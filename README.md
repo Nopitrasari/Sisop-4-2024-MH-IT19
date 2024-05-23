@@ -30,7 +30,7 @@ Adfi dan timnya juga ingin menambahkan fitur baru dengan membuat file dengan pre
 3) lalu kita membuat file inikaryakita.c berikut adalah isi nya :
    ```
    #define FUSE_USE_VERSION 35
-
+```
 #include <fuse3/fuse.h>
 #include <stdio.h>
 #include <string.h>
