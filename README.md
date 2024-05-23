@@ -12,7 +12,8 @@ Adfi merupakan seorang CEO agency creative bernama Ini Karya Kita. Ia sedang mel
 Pada folder “gallery”:
 Membuat folder dengan prefix "wm." Dalam folder ini, setiap gambar yang dipindahkan ke dalamnya akan diberikan watermark bertuliskan inikaryakita.id. 
 			Ex: "mv ikk.jpeg wm-foto/" 
-Output: 
+Output:
+
 Before: (tidak ada watermark bertuliskan inikaryakita.id)
 
 After: (terdapat watermark tulisan inikaryakita.id)
