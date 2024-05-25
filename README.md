@@ -174,7 +174,7 @@ int main(int argc, char *argv[]) {
     return fuse_main(argc, argv, &operations, NULL);
 } 
 ```
-#SOAL 2
+# SOAL 2
 
 Masih dengan Ini Karya Kita, sang CEO ingin melakukan tes keamanan pada folder sensitif Ini Karya Kita. Karena Teknologi Informasi merupakan departemen dengan salah satu fokus di Cyber Security, maka dia kembali meminta bantuan mahasiswa Teknologi Informasi angkatan 2023 untuk menguji dan mengatur keamanan pada folder sensitif tersebut. Untuk mendapatkan folder sensitif itu, mahasiswa IT 23 harus kembali mengunjungi website Ini Karya Kita pada www.inikaryakita.id/schedule . Silahkan isi semua formnya, tapi pada form subject isi dengan nama kelompok_SISOP24 , ex: IT01_SISOP24 . Lalu untuk form Masukkan Pesanmu, ketik “Mau Foldernya” . Tunggu hingga 1x24 jam, maka folder sensitif tersebut akan dikirimkan melalui email kalian. Apabila folder tidak dikirimkan ke email kalian, maka hubungi sang CEO untuk meminta bantuan.   
 
@@ -212,7 +212,7 @@ Catatan:
 Tolong cek email kalian secara berkala untuk mendapatkan folder sensitifnya
 Jika ada pertanyaan, bisa menghubungi Adfi via WA aja, nanti dikasih hint
 
-#REVISI
+# REVISI
 ```
 static void log_event(const char *tag, const char *information, int success) {
     time_t now;
