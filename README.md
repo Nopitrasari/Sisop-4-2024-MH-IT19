@@ -510,7 +510,7 @@ dan ini bukti bahwa mountpointnya sudah berhasil
 
 untuk file rahasia-berkas tidak ada perubahan
 
-#SOAL 3
+#SOAL-3
 
 Seorang arkeolog menemukan sebuah gua yang didalamnya tersimpan banyak relik dari zaman praaksara, sayangnya semua barang yang ada pada gua tersebut memiliki bentuk yang terpecah belah akibat bencana yang tidak diketahui. Sang arkeolog ingin menemukan cara cepat agar ia bisa menggabungkan relik-relik yang terpecah itu, namun karena setiap pecahan relik itu masih memiliki nilai tersendiri, ia memutuskan untuk membuat sebuah file system yang mana saat ia mengakses file system tersebut ia dapat melihat semua relik dalam keadaan utuh, sementara relik yang asli tidak berubah sama sekali.
 Ketentuan :
@@ -545,4 +545,12 @@ Ketika dilakukan listing, isi dari direktori [nama_bebas] adalah semua relic dar
 	pada soal 3c, cukup salin secara manual. File Server hanya untuk membuktikan bahwa semua file pada direktori [nama_bebas] dapat dibuka dengan baik.
 
 - discoveries.zip
+
+#PENGERJAAN/PENYELESAIAN 
+
+Mohon maaf untuk pengerjaan dari saya sendiri masih belum selesai dikarenakan kurang pahamnay saya dalam mengolah dan menganalisis soal untuk bisa menjawab soal yang ada. Selain itu, saya hanya bisa memberikan direktori tree milik saya
+
+
+#REVISI 
+
 
