@@ -530,8 +530,10 @@ static const char base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqr
 ```
 
 dan ini bukti bahwa mountpointnya sudah berhasil
+
 ```
-![image](https://github.com/Nopitrasari/Sisop-4-2024-MH-IT19/assets/151911480/d105eedc-b074-49bd-a62c-7a62378780dd)
+![image](https://github.com/Nopitrasari/Sisop-4-2024-MH-IT19/assets/151911480/a0aa35df-acdd-4a81-9f83-1cf4ed1089fd)
+
 ```
 
 untuk file rahasia-berkas tidak ada perubahan
