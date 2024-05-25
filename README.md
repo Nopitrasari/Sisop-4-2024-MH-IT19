@@ -549,8 +549,237 @@ Ketika dilakukan listing, isi dari direktori [nama_bebas] adalah semua relic dar
 #PENGERJAAN/PENYELESAIAN 
 
 Mohon maaf untuk pengerjaan dari saya sendiri masih belum selesai dikarenakan kurang pahamnay saya dalam mengolah dan menganalisis soal untuk bisa menjawab soal yang ada. Selain itu, saya hanya bisa memberikan direktori tree milik saya
+<img width="386" alt="Ke1" src="https://github.com/Nopitrasari/Sisop-4-2024-MH-IT19/assets/149749135/df6d3a32-a091-4ac8-95ab-d7fd04e4ed49">
+
+
+<img width="272" alt="Ke2" src="https://github.com/Nopitrasari/Sisop-4-2024-MH-IT19/assets/149749135/73956b23-bd20-4a5d-85a2-1ea087aff791">
 
 
 #REVISI 
+Oleh karena itu, untuk revisi saya belum bisa maksimal dalam mengerjakannya, untuk file archeology.c terbaru yaitu : 
+
+```
+
+Vertraut <testzero71@gmail.com>
+Thu, May 23, 4:46 PM (2 days ago)
+to Benyamin
+
+#define FUSE_USE_VERSION 31
+
+#include <fuse.h>
+#include <stdio.h>
+#include <string.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <dirent.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
+static const char *relics_dir = "./relics";
+
+// Utility function to get the full path of a file
+static void get_full_path(char fpath[], const char *path) {
+    sprintf(fpath, "%s%s", relics_dir, path);
+}
+
+// Utility function to combine parts of a file into a single file in memory
+static int read_combined_file(const char *path, char *buf, size_t size, off_t offset) {
+    char fpath[1000];
+    size_t total_size = 0;
+    int part = 0;
+    FILE *fp;
+    char part_path[1000];
+    char part_buf[10240];
+    size_t read_size;
+
+    while (1) {
+        sprintf(part_path, "%s.%03d", path, part);
+        get_full_path(fpath, part_path);
+        fp = fopen(fpath, "rb");
+        if (!fp) break;
+
+        while ((read_size = fread(part_buf, 1, sizeof(part_buf), fp)) > 0) {
+            if (offset < read_size) {
+                size_t copy_size = (read_size - offset > size) ? size : read_size - offset;
+                memcpy(buf, part_buf + offset, copy_size);
+                buf += copy_size;
+                size -= copy_size;
+                offset = 0;
+                if (size == 0) {
+                    fclose(fp);
+                    return total_size + copy_size;
+                }
+            } else {
+                offset -= read_size;
+            }
+            total_size += read_size;
+        }
+
+        fclose(fp);
+        part++;
+    }
+
+    return total_size;
+}
+
+static int relics_getattr(const char *path, struct stat *stbuf) {
+    char fpath[1000];
+    struct stat st;
+    int res = 0;
+
+    get_full_path(fpath, path);
+    memset(stbuf, 0, sizeof(struct stat));
+
+    // Check if the combined file exists
+    if (lstat(fpath, stbuf) == -1) {
+        int part = 0;
+        size_t total_size = 0;
+
+        while (1) {
+            sprintf(fpath, "%s%s.%03d", relics_dir, path, part);
+            if (lstat(fpath, &st) == -1) {
+                if (part == 0) {
+                    return -errno;
+                }
+                break;
+            }
+            total_size += st.st_size;
+            part++;
+        }
+
+        if (part > 0) {
+            stbuf->st_mode = st.st_mode;
+            stbuf->st_nlink = 1;
+            stbuf->st_size = total_size;
+            stbuf->st_blocks = (total_size + 511) / 512;
+            stbuf->st_blksize = 512;
+        }
+    }
+
+    return res;
+}
+
+static int relics_readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_t offset, struct fuse_file_info *fi) {
+    (void) offset;
+    (void) fi;
+
+    filler(buf, ".", NULL, 0);
+    filler(buf, "..", NULL, 0);
+
+    DIR *dp;
+    struct dirent *de;
+    dp = opendir(relics_dir);
+    if (dp == NULL) {
+        return -errno;
+    }
+
+    char current_file[256] = "";
+    while ((de = readdir(dp)) != NULL) {
+        if (strstr(de->d_name, ".000")) {
+            strncpy(current_file, de->d_name, strchr(de->d_name, '.') - de->d_name);
+            filler(buf, current_file, NULL, 0);
+        }
+    }
+
+    closedir(dp);
+    return 0;
+}
+
+static int relics_open(const char *path, struct fuse_file_info *fi) {
+    return 0; // FUSE will call our read function directly
+}
+
+static int relics_read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi) {
+    (void) fi;
+
+    char fpath[1000];
+    get_full_path(fpath, path);
+
+    int total_size = read_combined_file(path, buf, size, offset);
+    return total_size;
+}
+
+static int relics_create(const char *path, mode_t mode, struct fuse_file_info *fi) {
+    char fpath[1000];
+    sprintf(fpath, "%s%s.000", relics_dir, path);
+
+    FILE *fp = fopen(fpath, "wb");
+    if (fp == NULL) {
+        return -errno;
+    }
+    fclose(fp);
+    return 0;
+}
+
+static int relics_write(const char *path, const char *buf, size_t size, off_t offset, struct fuse_file_info *fi) {
+    char fpath[1000];
+    int part = offset / 10240;
+    int part_offset = offset % 10240;
+    size_t written = 0;
+
+    while (size > 0) {
+        sprintf(fpath, "%s%s.%03d", relics_dir, path, part);
+        FILE *fp = fopen(fpath, "rb+");
+        if (!fp) {
+            fp = fopen(fpath, "wb");
+            if (!fp) {
+                return -errno;
+            }
+        }
+
+        fseek(fp, part_offset, SEEK_SET);
+        size_t write_size = (size > 10240 - part_offset) ? 10240 - part_offset : size;
+        written += fwrite(buf, 1, write_size, fp);
+        fclose(fp);
+
+        buf += write_size;
+        size -= write_size;
+        part++;
+        part_offset = 0;
+    }
+
+    return written;
+}
+
+static int relics_unlink(const char *path) {
+    char fpath[1000];
+    int part = 0;
+
+    while (1) {
+        sprintf(fpath, "%s%s.%03d", relics_dir, path, part);
+        if (remove(fpath) == -1) {
+            if (errno == ENOENT) {
+                if (part == 0) {
+                    return -errno;
+                }
+                break;
+            }
+            return -errno;
+        }
+        part++;
+    }
+
+    return 0;
+}
+
+static struct fuse_operations relics_oper = {
+    .getattr = relics_getattr,
+    .readdir = relics_readdir,
+    .open = relics_open,
+    .read = relics_read,
+    .create = relics_create,
+    .write = relics_write,
+    .unlink = relics_unlink,
+};
+
+int main(int argc, char *argv[]) {
+    return fuse_main(argc, argv, &relics_oper, NULL);
+}
+```
+
+cukup sekian dari saya, meskipun hasil output masih error 
+
 
 
